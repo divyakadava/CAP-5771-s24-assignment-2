@@ -62,11 +62,11 @@ def compute():
     bvv = datasets.make_blobs(n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5], random_state=42)
 
     datasets_list = [
-        (nc, 'noisy_circles'),
-        (nm, 'noisy_moons'),
-        (b, 'blobs'),
-        (add, 'aniso'),
-        (bvv, 'blobs_varied')
+        (nc, 'nc'),
+        (nm, 'nm'),
+        (b, 'b'),
+        (add, 'add'),
+        (bvv, 'bvv')
     ]
 
     # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
@@ -103,11 +103,11 @@ def compute():
     # dct value: return a dictionary of one or more abbreviated dataset names (zero or more elements) 
     # and associated k-values with correct clusters.  key abbreviations: 'nc', 'nm', 'bvv', 'add', 'b'. 
     # The values are the list of k for which there is success. Only return datasets where the list of cluster size k is non-empty.
-    dct = answers["1C: cluster successes"] = {"nc": [3], "nm": [3]} 
+    dct = answers["1C: cluster successes"] = {"b": [3], "bvv": [3]} 
 
     # dct value: return a list of 0 or more dataset abbreviations (list has zero or more elements, 
     # which are abbreviated dataset names as strings)
-    dct = answers["1C: cluster failures"] = ["nc", "nc"]
+    dct = answers["1C: cluster failures"] = ["nc", "nm"]
 
     """
     D. Repeat 1.C a few times and comment on which (if any) datasets seem to be sensitive to the choice of initialization for the k=2,3 cases. You do not need to add the additional plots to your report.
