@@ -75,23 +75,24 @@ def compute():
     C.	Plot the SSE as a function of k for k=1,2,….,8, and choose the optimal k based on the elbow method.
     """
     sse_values = []
-    k_values = list(range(1, 9))  # k values from 1 to 8
+    k_values = list(range(1, 9))
     for k in k_values:
         _, sse = fit_kmeans(X, k)
-        sse_values.append(sse)  # Appending only the SSE value
+        # Ensure each element is a list of floats
+        sse_values.append([float(k), float(sse)])
 
     # Plotting SSE values
     plt.figure(figsize=(8, 6))
-    plt.plot(k_values, sse_values, marker='o')  # Plot using k_values and sse_values
+    plt.plot(k_values, [val[1] for val in sse_values], marker='o')  # Correctly plotting SSE values
     plt.title('SSE as a function of k')
     plt.xlabel('k')
     plt.ylabel('SSE')
-    plt.xticks(k_values)  # Ensure x-axis ticks correspond to k_values
+    plt.xticks(k_values)
     plt.savefig("sse_plot.png")
     plt.close()
 
     # Saving SSE values
-    dct = answers["2C: SSE plot"] = list(zip(k_values, sse_values)) 
+    dct = answers["2C: SSE plot"] = sse_values 
 
     """
     D.	Repeat part 2.C for inertia (note this is an attribute in the kmeans estimator called _inertia). Do the optimal k’s agree?
@@ -100,30 +101,33 @@ def compute():
     for k in k_values:
         kmeans = KMeans(n_clusters=k, init='random', random_state=42)
         kmeans.fit(X)
-        inertia_values.append(kmeans.inertia_)  # Appending only the inertia value
+        # Ensure each element is a list of floats
+        inertia_values.append([float(k), float(kmeans.inertia_)])  # Appending only the inertia value
 
     # Plotting inertia values
     plt.figure(figsize=(8, 6))
-    plt.plot(k_values, inertia_values, marker='o')  # Plot using k_values and inertia_values
+    plt.plot(k_values, [val[1] for val in inertia_values], marker='o')  # Correctly plotting Inertia values
     plt.title('Inertia as a function of k')
     plt.xlabel('k')
     plt.ylabel('Inertia')
-    plt.xticks(k_values)  # Ensure x-axis ticks correspond to k_values
+    plt.xticks(k_values)
     plt.savefig("inertia_plot.png")
     plt.close()
 
     # Saving inertia values
-    dct = answers["2D: inertia plot"] = list(zip(k_values, inertia_values))
+    dct = answers["2D: inertia plot"] = inertia_values
 
     changes_sse = np.diff(sse_values)  # Compute the difference between each SSE value
     changes_inertia = np.diff(inertia_values)  # Compute the difference for inertia
 
     # Now we look for the "elbow" in the differences, which is the point where the change is minimal
-    optimal_k_sse = np.argmin(changes_sse) + 2  # +2 since np.diff reduces the length by 1, and we need the index for k
+    changes_sse = np.diff([x[1] for x in sse_values])  # Extract only the SSE values for diff calculation
+    changes_inertia = np.diff([x[1] for x in inertia_values])  # Extract only the inertia values for diff calculation
+    optimal_k_sse = np.argmin(changes_sse) + 2  # +2 for index to k conversion
     optimal_k_inertia = np.argmin(changes_inertia) + 2
 
-    # dct value should be a string, e.g., "yes" or "no"
     dct = answers["2D: do ks agree?"] = "yes" if optimal_k_sse == optimal_k_inertia else "no"
+
 
     return answers
 
