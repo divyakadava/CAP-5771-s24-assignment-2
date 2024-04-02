@@ -98,8 +98,6 @@ def compute():
     # Assuming the plot_part1C function has been corrected to use only the data (X) and not expect unused labels
     myplt.plot_part1C(kmeans_results, "plot1_C.jpg")
 
-    return answers
-
     # dct value: return a dictionary of one or more abbreviated dataset names (zero or more elements) 
     # and associated k-values with correct clusters.  key abbreviations: 'nc', 'nm', 'bvv', 'add', 'b'. 
     # The values are the list of k for which there is success. Only return datasets where the list of cluster size k is non-empty.
