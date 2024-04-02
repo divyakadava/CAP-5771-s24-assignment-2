@@ -42,6 +42,7 @@ def fit_kmeans(data, n_clusters):
     data_scaled = scaler.fit_transform(data)
     kmeans = KMeans(n_clusters=n_clusters, init='random', random_state=42)
     kmeans.fit(data_scaled)
+    # SSE calculation is updated as per the task requirement.
     sse = np.sum((data_scaled - kmeans.cluster_centers_[kmeans.labels_])**2)
     return kmeans.labels_, sse
 
@@ -51,6 +52,7 @@ def compute():
     # ---------------------
     answers = {}
     X, y = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
+    # We need to return the coordinates X, the labels y, and the center points, which we get from the KMeans f
 
     """
     A.	Call the make_blobs function with following parameters :(center_box=(-20,20), n_samples=20, centers=5, random_state=12).
@@ -70,45 +72,52 @@ def compute():
     C.	Plot the SSE as a function of k for k=1,2,….,8, and choose the optimal k based on the elbow method.
     """
     sse_values = []
-    for k in range(1, 9):
+    k_values = list(range(1, 9))  # k values from 1 to 8
+    for k in k_values:
         _, sse = fit_kmeans(X, k)
-        sse_values.append(sse)
+        sse_values.append(sse)  # Appending only the SSE value
+
+    # Plotting SSE values
     plt.figure(figsize=(8, 6))
-    plt.plot(range(1, 9), sse_values, marker='o')
+    plt.plot(k_values, sse_values, marker='o')  # Plot using k_values and sse_values
     plt.title('SSE as a function of k')
     plt.xlabel('k')
     plt.ylabel('SSE')
+    plt.xticks(k_values)  # Ensure x-axis ticks correspond to k_values
     plt.savefig("sse_plot.png")
     plt.close()
 
-    # dct value: a list of tuples, e.g., [[0, 100.], [1, 200.]]
-    # Each tuple is a (k, SSE) pair
-    dct = answers["2C: SSE plot"] = sse_values
+    # Saving SSE values
+    dct = answers["2C: SSE plot"] = list(zip(k_values, sse_values)) 
 
     """
     D.	Repeat part 2.C for inertia (note this is an attribute in the kmeans estimator called _inertia). Do the optimal k’s agree?
     """
     inertia_values = []
-    for k in range(1, 9):
+    for k in k_values:
         kmeans = KMeans(n_clusters=k, init='random', random_state=42)
         kmeans.fit(X)
-        inertia_values.append(kmeans.inertia_)
+        inertia_values.append(kmeans.inertia_)  # Appending only the inertia value
 
-    # Plotting inertia
+    # Plotting inertia values
     plt.figure(figsize=(8, 6))
-    plt.plot(range(1, 9), inertia_values, marker='o')
+    plt.plot(k_values, inertia_values, marker='o')  # Plot using k_values and inertia_values
     plt.title('Inertia as a function of k')
     plt.xlabel('k')
     plt.ylabel('Inertia')
+    plt.xticks(k_values)  # Ensure x-axis ticks correspond to k_values
     plt.savefig("inertia_plot.png")
     plt.close()
 
-    # dct value has the same structure as in 2C
-    dct = answers["2D: inertia plot"] = inertia_values
-    sse_diff = np.diff(sse_values)
-    inertia_diff = np.diff(inertia_values)
-    optimal_k_sse = np.argmin(sse_diff) + 1  # +1 because index starts at 0
-    optimal_k_inertia = np.argmin(inertia_diff) + 1
+    # Saving inertia values
+    dct = answers["2D: inertia plot"] = list(zip(k_values, inertia_values))
+
+    changes_sse = np.diff(sse_values)  # Compute the difference between each SSE value
+    changes_inertia = np.diff(inertia_values)  # Compute the difference for inertia
+
+    # Now we look for the "elbow" in the differences, which is the point where the change is minimal
+    optimal_k_sse = np.argmin(changes_sse) + 2  # +2 since np.diff reduces the length by 1, and we need the index for k
+    optimal_k_inertia = np.argmin(changes_inertia) + 2
 
     # dct value should be a string, e.g., "yes" or "no"
     dct = answers["2D: do ks agree?"] = "yes" if optimal_k_sse == optimal_k_inertia else "no"
