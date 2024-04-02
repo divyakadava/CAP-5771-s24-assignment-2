@@ -52,6 +52,9 @@ def compute():
     # ---------------------
     answers = {}
     X, y = make_blobs(n_samples=20, centers=5, center_box=(-20, 20), random_state=12)
+    kmeans = KMeans(n_clusters=5, random_state=12)
+    kmeans.fit(X)
+    centers = kmeans.cluster_centers_
     # We need to return the coordinates X, the labels y, and the center points, which we get from the KMeans f
 
     """
@@ -59,7 +62,7 @@ def compute():
     """
 
     # dct: return value from the make_blobs function in sklearn, expressed as a list of three numpy arrays
-    dct = answers["2A: blob"] = [X, y]
+    dct = answers["2A: blob"] = [X, y, centers]
 
     """
     B. Modify the fit_kmeans function to return the SSE (see Equations 8.1 and 8.2 in the book).
