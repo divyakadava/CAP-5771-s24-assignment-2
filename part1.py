@@ -31,18 +31,8 @@ In the first task, you will explore how k-Means perform on datasets with diverse
 # the question asked. 
 
 def fit_kmeans(data, n_clusters):
-    """
-    Fits k-means to the data and returns the labels.
-
-    :param data: Dataset to cluster.
-    :param n_clusters: Number of clusters to fit.
-    :return: Predicted labels from k-means clustering.
-    """
-    # Standardize the data
     scaler = StandardScaler()
     data_scaled = scaler.fit_transform(data)
-
-    # Fit KMeans
     kmeans = KMeans(n_clusters=n_clusters, init='random', random_state=42)
     kmeans.fit(data_scaled)
 
@@ -68,16 +58,11 @@ def compute():
         (add, 'add'),
         (bvv, 'bvv')
     ]
-
-    # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
-    # 'nc', 'nm', 'bvv', 'add', 'b'. keys: 'nc', 'nm', 'bvv', 'add', 'b' (abbreviated datasets)
     dct = answers["1A: datasets"] = {name : data for data, name in datasets_list}
 
     """
    B. Write a function called fit_kmeans that takes dataset (before any processing on it), i.e., pair of (data, label) Numpy arrays, and the number of clusters as arguments, and returns the predicted labels from k-means clustering. Use the init='random' argument and make sure to standardize the data (see StandardScaler transform), prior to fitting the KMeans estimator. This is the function you will use in the following questions. 
     """
-
-    # dct value:  the `fit_kmeans` function
     dct = answers["1B: fit_kmeans"] = fit_kmeans
 
 
@@ -94,17 +79,8 @@ def compute():
             labels = fit_kmeans(data[0], k)
             results[k] = labels
         kmeans_results[name] = (data, results)
-    
-    # Assuming the plot_part1C function has been corrected to use only the data (X) and not expect unused labels
     myplt.plot_part1C(kmeans_results, "plot1_C.jpg")
-
-    # dct value: return a dictionary of one or more abbreviated dataset names (zero or more elements) 
-    # and associated k-values with correct clusters.  key abbreviations: 'nc', 'nm', 'bvv', 'add', 'b'. 
-    # The values are the list of k for which there is success. Only return datasets where the list of cluster size k is non-empty.
     dct = answers["1C: cluster successes"] = {"b": [3], "bvv": [3]} 
-
-    # dct value: return a list of 0 or more dataset abbreviations (list has zero or more elements, 
-    # which are abbreviated dataset names as strings)
     dct = answers["1C: cluster failures"] = ["nc", "nm"]
 
     """
@@ -112,10 +88,6 @@ def compute():
 
     Create a pdf of the plots and return in your report. 
     """
-
-    # dct value: list of dataset abbreviations
-    # Look at your plots, and return your answers.
-    # The plot is part of your report, a pdf file name "report.pdf", in your repository.
     dct = answers["1D: datasets sensitive to initialization"] = ["nc", "nm", "add"]
 
     return answers
